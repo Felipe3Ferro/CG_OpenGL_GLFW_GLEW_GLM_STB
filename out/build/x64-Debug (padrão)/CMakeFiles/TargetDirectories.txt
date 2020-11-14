@@ -1,0 +1,5 @@
+C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)/CMakeFiles/edit_cache.dir
+C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)/CMakeFiles/BlueMarble.dir
+C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)/CMakeFiles/Vectors.dir
+C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)/CMakeFiles/Matrices.dir
+C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)/CMakeFiles/rebuild_cache.dir
