@@ -10,8 +10,10 @@
 #include<glm/glm.hpp>
 #include <glm/ext.hpp> 
 
+#define STB_IMAGE_IMPLEMENTATION
+#include<stb_image.h>
 
-const int Width = 800; 
+const int Width = 800;
 const int Height = 600;
 
 std::string ReadFile(const char* FilePath) {
@@ -34,7 +36,7 @@ void CheckShader(GLuint ShaderId) {
 	if (Result == GL_FALSE) {
 
 		//Houve um erro ao compilar o shader, vamos imprimir o log para saber qual foi o erro
-		
+
 		//Obter o tamanho do log
 		GLint InfoLogLength = 0;
 		glGetShaderiv(ShaderId, GL_INFO_LOG_LENGTH, &InfoLogLength);
@@ -72,7 +74,7 @@ GLuint LoadShaders(const char* VertexShaderFile, const char* FragmentShaderFile)
 
 	// Verificar se a compilação do VertexShader deu certo
 
-	std::cout << "Compilando "<< FragmentShaderFile << std::endl;
+	std::cout << "Compilando " << FragmentShaderFile << std::endl;
 	const char* FragmentShaderSourcePtr = FragmentShaderSource.c_str();
 	glShaderSource(FragmentShaderId, 1, &FragmentShaderSourcePtr, nullptr);
 	glCompileShader(FragmentShaderId);
@@ -93,7 +95,7 @@ GLuint LoadShaders(const char* VertexShaderFile, const char* FragmentShaderFile)
 	glGetProgramiv(ProgramId, GL_LINK_STATUS, &Result);
 
 	if (Result == GL_FALSE) {
-		
+
 		//Houve um erro ao compilar o shader, vamos imprimir o log para saber qual o erro
 
 		//Obtem o tamanho do log
@@ -103,7 +105,7 @@ GLuint LoadShaders(const char* VertexShaderFile, const char* FragmentShaderFile)
 		if (InfoLogLength > 0) {
 			std::string ProgramInfoLog(InfoLogLength, '\0');
 			glGetProgramInfoLog(ProgramId, InfoLogLength, nullptr, &ProgramInfoLog[0]);
-			
+
 			std::cout << "Erro ao linkar o programa" << std::endl;
 			std::cout << ProgramInfoLog << std::endl;
 			assert(false);
@@ -119,6 +121,54 @@ GLuint LoadShaders(const char* VertexShaderFile, const char* FragmentShaderFile)
 	return ProgramId;
 
 }
+
+GLuint LoadTexture(const char* TextureFile) {
+	std::cout << "Carregando Textura" << TextureFile << std::endl;
+
+	stbi_set_flip_vertically_on_load(true);
+
+	int TextureWidth,TextureHeight,NumberOfComponents = 0;
+
+
+	unsigned char* TextureData= stbi_load(TextureFile, &TextureWidth, &TextureHeight, &NumberOfComponents,3);
+
+	assert(TextureData);
+
+	//Gerar o identificador da textura
+	GLuint TextureId;
+	glGenTextures(1, &TextureId);
+
+	//Habilita a textura para ser modificada
+	glBindTexture(GL_TEXTURE_2D, TextureId);
+
+	//Copia a textura para a memória de vídeo (GPU)
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,TextureWidth,TextureHeight,0,GL_RGB,GL_UNSIGNED_BYTE,TextureData);
+
+	//Filtros de magnificação e minificação
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	//Configurar o Texture Wrapping
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	//Gerar o mipmap a partir da textura
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	//Desligar a textura pois ela ja foi copiada para GPU
+	glBindTexture(GL_TEXTURE_2D,0);
+
+	stbi_image_free(TextureData);
+
+	return TextureId;
+}
+
+struct Vertex {
+	glm::vec3 Position;
+	glm::vec3 Color;
+	glm::vec2 UV;
+};
 
 int main() {
 
@@ -151,11 +201,13 @@ int main() {
 
 	GLuint ProgramId = LoadShaders("shaders/triangle_vert.glsl", "shaders/triangle_frag.glsl");
 
+	GLuint TextureId = LoadTexture("textures/earth_2k.jpg");
+
 	//Definindo um triangulo em coordenadas normalizadas
-	std::array<glm::vec3, 3> Triangle = {
-		glm::vec3{-1.0f,-1.0f,0.0f},
-		glm::vec3{1.0f,-1.0f,0.0f},
-		glm::vec3{0.0f,1.0f,0.0f}
+	std::array<Vertex, 3> Triangle = {
+		Vertex{glm::vec3{-1.0f,-1.0f,0.0f},glm::vec3{1.0f,0.0f,0.0f}, glm::vec2{0.0f,0.0f}},
+		Vertex{glm::vec3{1.0f,-1.0f,0.0f},glm::vec3{0.0f,1.0f,0.0f},glm::vec2{1.0f,0.0f} },
+		Vertex{glm::vec3{0.0f,1.0f,0.0f},glm::vec3{0.0f,0.0f,1.0f},glm::vec2{0.5f,1.0f} } 
 	};
 
 	//________________________________________________________________________Inicio da Camera________________________________________________________________________
@@ -180,12 +232,12 @@ int main() {
 
 
 	//Aplicar a ModelViewProjection nos vértices do trianglo
-	for (glm::vec3& Vertex : Triangle) 
+	/*for (Vertex& Vertex : Triangle) USA O CALCULO NO PROCESSADOR
 	{
-		glm::vec4 ProjectedVertex = ModelViewProjection * glm::vec4{ Vertex, 1.0f };
+		glm::vec4 ProjectedVertex = ModelViewProjection * glm::vec4{ Vertex.Position, 1.0f };
 		ProjectedVertex /= ProjectedVertex.w;
-		Vertex = ProjectedVertex;
-	}
+		Vertex.Position = ProjectedVertex;
+	}*/
 	//________________________________________________________________________Fim da Camera________________________________________________________________________
 
 	//Agora, vamos copiar os vértices do triangulo para a memória da GPU
@@ -198,14 +250,14 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
 
 	//Copiar os dados para a memória de vídeo
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Triangle), Triangle.data(),GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Triangle), Triangle.data(), GL_STATIC_DRAW);
 
 
 	//Definir a cor de fundo
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
 
 	//Entra no loop de eventos da aplicação
-	while(!glfwWindowShouldClose(Window)){
+	while (!glfwWindowShouldClose(Window)) {
 		// glClear vai limpar o framebuffer. GLCOLOR_BUFFER_BIT diz para limpar o buffer de cor. Depois de limpar, ele vai preencher com a cor que foi configurada no glClearColor.
 		//Quando formos desenhar geometris 3D, vamos voltar ao glClear porque teremos que limpar o buffer de profundidade(depth buffer)
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -214,21 +266,39 @@ int main() {
 		glUseProgram(ProgramId);
 
 
+		GLint ModelViewProjectionLoc = glGetUniformLocation(ProgramId, "ModelViewProjection");
+		glUniformMatrix4fv(ModelViewProjectionLoc, 1, GL_FALSE, glm::value_ptr(ModelViewProjection));
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, TextureId);
+
+		GLint TextureSamplerLoc = glGetUniformLocation(ProgramId, "TextureSampler");
+		glUniform1i(TextureSamplerLoc, 0);
+
+
 		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
 
 		//Diz para o OpenGL que o VertexBuffer vai ser o buffer ativo no momento
 		glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
 
 		//Informa ao OpenGL onde, dentro do vertexBuffer, onde os vertices estão
 		//NO caso o array Triangles é contiguoo em memória, logo basta dizer quantos vertices vamos usar para desenhar o triangulo
-		glVertexAttribPointer(0, 3,GL_FLOAT,GL_FALSE,0, nullptr);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, sizeof(Vertex),
+							reinterpret_cast<void*>(offsetof(Vertex, Color)));
+
+		glVertexAttribPointer(2,2,GL_FLOAT,GL_TRUE,sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, UV)));
 
 		//Finalmente diz para o OpenGL desenhar o triangulo com os dados que estão armazenados no VertexBuffer
-		glDrawArrays(GL_TRIANGLES, 0,3);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		//Reverter o estado que nós criamos
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
 
 		//Desabilitar o programa ativo
 		glUseProgram(0);

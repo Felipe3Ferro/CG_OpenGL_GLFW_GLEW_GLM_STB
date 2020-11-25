@@ -19,7 +19,8 @@ target_link_libraries(BlueMarble PRIVATE glfw3.lib
 add_custom_command(TARGET BlueMarble POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_SOURCE_DIR}/deps/glew/bin/Release/x64/glew32.dll" "${CMAKE_BINARY_DIR}/glew32.dll"
                    COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_SOURCE_DIR}/shaders/triangle_frag.glsl" "${CMAKE_BINARY_DIR}/shaders/triangle_frag.glsl"  
-                   COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_SOURCE_DIR}/shaders/triangle_vert.glsl" "${CMAKE_BINARY_DIR}/shaders/triangle_vert.glsl"             
+                   COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_SOURCE_DIR}/shaders/triangle_vert.glsl" "${CMAKE_BINARY_DIR}/shaders/triangle_vert.glsl"  
+                   COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_SOURCE_DIR}/textures/earth_2k.jpg" "${CMAKE_BINARY_DIR}/textures/earth_2k.jpg"            
 )
 
 add_executable(Vectors Vectors.cpp)
