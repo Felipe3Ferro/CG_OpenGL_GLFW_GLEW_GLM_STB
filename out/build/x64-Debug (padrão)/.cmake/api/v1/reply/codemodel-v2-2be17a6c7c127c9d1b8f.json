@@ -42,21 +42,21 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "BlueMarble::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-BlueMarble-Debug-6ea1ed9c185015a6cf42.json",
+					"jsonFile" : "target-BlueMarble-Debug-3db3731b812addec0c2b.json",
 					"name" : "BlueMarble",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "Matrices::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-Matrices-Debug-5901eed6993a4d3e9e47.json",
+					"jsonFile" : "target-Matrices-Debug-7d8f4683b4b2e7df00ec.json",
 					"name" : "Matrices",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "Vectors::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-Vectors-Debug-a67fc1755a58b8171fb7.json",
+					"jsonFile" : "target-Vectors-Debug-7f4133e57ad1409db8ca.json",
 					"name" : "Vectors",
 					"projectIndex" : 0
 				}
@@ -66,8 +66,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)",
-		"source" : "C:/Users/Pichau/source/repos/CG_CURSO"
+		"build" : "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/out/build/x64-Debug (padrão)",
+		"source" : "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB"
 	},
 	"version" : 
 	{

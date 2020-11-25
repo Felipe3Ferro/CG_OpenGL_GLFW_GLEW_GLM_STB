@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/Pichau/source/repos/CG_CURSO
+# Install script for directory: C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Users/Pichau/source/repos/CG_CURSO/out/install/x64-Debug (padrão)")
+  set(CMAKE_INSTALL_PREFIX "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/out/install/x64-Debug (padrão)")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/out/build/x64-Debug (padrão)/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

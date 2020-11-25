@@ -21,7 +21,7 @@ Compilation of the C compiler identification source "CMakeCCompilerId.c" produce
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.obj"
 
-The C compiler identification is MSVC, found in "C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)/CMakeFiles/3.17.20032601-MSVC_2/CompilerIdC/CMakeCCompilerId.exe"
+The C compiler identification is MSVC, found in "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/out/build/x64-Debug (padrão)/CMakeFiles/3.17.20032601-MSVC_2/CompilerIdC/CMakeCCompilerId.exe"
 
 Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
 Compiler: D:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.27.29110/bin/Hostx64/x64/cl.exe 
@@ -45,39 +45,39 @@ Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" p
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.obj"
 
-The CXX compiler identification is MSVC, found in "C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)/CMakeFiles/3.17.20032601-MSVC_2/CompilerIdCXX/CMakeCXXCompilerId.exe"
+The CXX compiler identification is MSVC, found in "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/out/build/x64-Debug (padrão)/CMakeFiles/3.17.20032601-MSVC_2/CompilerIdCXX/CMakeCXXCompilerId.exe"
 
 Determining if the C compiler works passed with the following output:
-Change Dir: C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/out/build/x64-Debug (padrão)/CMakeFiles/CMakeTmp
 
-Run Build Command(s):D:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_88aed && [1/2] Building C object CMakeFiles\cmTC_88aed.dir\testCCompiler.c.obj
-[2/2] Linking C executable cmTC_88aed.exe
+Run Build Command(s):D:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_60421 && [1/2] Building C object CMakeFiles\cmTC_60421.dir\testCCompiler.c.obj
+[2/2] Linking C executable cmTC_60421.exe
 
 
 
 Detecting C compiler ABI info compiled with the following output:
-Change Dir: C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/out/build/x64-Debug (padrão)/CMakeFiles/CMakeTmp
 
-Run Build Command(s):D:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_359c5 && [1/2] Building C object CMakeFiles\cmTC_359c5.dir\CMakeCCompilerABI.c.obj
+Run Build Command(s):D:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_eae43 && [1/2] Building C object CMakeFiles\cmTC_eae43.dir\CMakeCCompilerABI.c.obj
 Observação: incluindo arquivo: D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.17\Modules\CMakeCompilerABI.h
-[2/2] Linking C executable cmTC_359c5.exe
+[2/2] Linking C executable cmTC_eae43.exe
 
 
 
 Determining if the CXX compiler works passed with the following output:
-Change Dir: C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/out/build/x64-Debug (padrão)/CMakeFiles/CMakeTmp
 
-Run Build Command(s):D:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_97578 && [1/2] Building CXX object CMakeFiles\cmTC_97578.dir\testCXXCompiler.cxx.obj
-[2/2] Linking CXX executable cmTC_97578.exe
+Run Build Command(s):D:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_a3b6f && [1/2] Building CXX object CMakeFiles\cmTC_a3b6f.dir\testCXXCompiler.cxx.obj
+[2/2] Linking CXX executable cmTC_a3b6f.exe
 
 
 
 Detecting CXX compiler ABI info compiled with the following output:
-Change Dir: C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/out/build/x64-Debug (padrão)/CMakeFiles/CMakeTmp
 
-Run Build Command(s):D:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_9b61c && [1/2] Building CXX object CMakeFiles\cmTC_9b61c.dir\CMakeCXXCompilerABI.cpp.obj
+Run Build Command(s):D:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_b7e33 && [1/2] Building CXX object CMakeFiles\cmTC_b7e33.dir\CMakeCXXCompilerABI.cpp.obj
 Observação: incluindo arquivo: D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.17\Modules\CMakeCompilerABI.h
-[2/2] Linking CXX executable cmTC_9b61c.exe
+[2/2] Linking CXX executable cmTC_b7e33.exe
 
 
 

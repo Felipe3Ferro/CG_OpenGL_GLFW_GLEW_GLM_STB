@@ -66,19 +66,19 @@
 			[
 				{
 					"backtrace" : 4,
-					"path" : "C:/Users/Pichau/source/repos/CG_CURSO/deps/glm"
+					"path" : "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/deps/glm"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "C:/Users/Pichau/source/repos/CG_CURSO/deps/stb"
+					"path" : "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/deps/stb"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "C:/Users/Pichau/source/repos/CG_CURSO/deps/glfw/include"
+					"path" : "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/deps/glfw/include"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "C:/Users/Pichau/source/repos/CG_CURSO/deps/glew/include"
+					"path" : "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/deps/glew/include"
 				}
 			],
 			"language" : "CXX",
@@ -103,12 +103,12 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "-LIBPATH:C:\\Users\\Pichau\\source\\repos\\CG_CURSO\\deps\\glfw\\lib-vc2019",
+				"fragment" : "-LIBPATH:C:\\Users\\Pichau\\Documents\\Programação\\C++\\CG_OpenGL_GLFW_GLEW_GLM_STB\\deps\\glfw\\lib-vc2019",
 				"role" : "libraryPath"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "-LIBPATH:C:\\Users\\Pichau\\source\\repos\\CG_CURSO\\deps\\glew\\lib\\Release\\x64",
+				"fragment" : "-LIBPATH:C:\\Users\\Pichau\\Documents\\Programação\\C++\\CG_OpenGL_GLFW_GLEW_GLM_STB\\deps\\glew\\lib\\Release\\x64",
 				"role" : "libraryPath"
 			},
 			{

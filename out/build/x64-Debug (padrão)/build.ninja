@@ -39,7 +39,7 @@ include rules.ninja
 # Utility command for edit_cache
 
 build CMakeFiles\edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D "C:\Users\Pichau\source\repos\CG_CURSO\out\build\x64-Debug (padrão)" && "D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
+  COMMAND = cmd.exe /C "cd /D "C:\Users\Pichau\Documents\Programação\C++\CG_OpenGL_GLFW_GLEW_GLM_STB\out\build\x64-Debug (padrão)" && "D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -74,9 +74,9 @@ build BlueMarble.exe: CXX_EXECUTABLE_LINKER__BlueMarble_Debug CMakeFiles\BlueMar
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = glfw3.lib  glew32.lib  opengl32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
-  LINK_PATH = -LIBPATH:C:\Users\Pichau\source\repos\CG_CURSO\deps\glfw\lib-vc2019   -LIBPATH:C:\Users\Pichau\source\repos\CG_CURSO\deps\glew\lib\Release\x64
+  LINK_PATH = -LIBPATH:C:\Users\Pichau\Documents\Programação\C++\CG_OpenGL_GLFW_GLEW_GLM_STB\deps\glfw\lib-vc2019   -LIBPATH:C:\Users\Pichau\Documents\Programação\C++\CG_OpenGL_GLFW_GLEW_GLM_STB\deps\glew\lib\Release\x64
   OBJECT_DIR = CMakeFiles\BlueMarble.dir
-  POST_BUILD = cmd.exe /C "cd /D "C:\Users\Pichau\source\repos\CG_CURSO\out\build\x64-Debug (padrão)" && "D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E copy C:/Users/Pichau/source/repos/CG_CURSO/deps/glew/bin/Release/x64/glew32.dll "C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)/glew32.dll""
+  POST_BUILD = cmd.exe /C "cd /D "C:\Users\Pichau\Documents\Programação\C++\CG_OpenGL_GLFW_GLEW_GLM_STB\out\build\x64-Debug (padrão)" && "D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E copy C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/deps/glew/bin/Release/x64/glew32.dll "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/out/build/x64-Debug (padrão)/glew32.dll" && "D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E copy C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/shaders/triangle_frag.glsl "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/out/build/x64-Debug (padrão)/shaders/triangle_frag.glsl" && "D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E copy C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/shaders/triangle_vert.glsl "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/out/build/x64-Debug (padrão)/shaders/triangle_vert.glsl""
   PRE_LINK = cd .
   TARGET_COMPILE_PDB = CMakeFiles\BlueMarble.dir\
   TARGET_FILE = BlueMarble.exe
@@ -162,7 +162,7 @@ build Matrices.exe: CXX_EXECUTABLE_LINKER__Matrices_Debug CMakeFiles\Matrices.di
 # Utility command for rebuild_cache
 
 build CMakeFiles\rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D "C:\Users\Pichau\source\repos\CG_CURSO\out\build\x64-Debug (padrão)" && "D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\Pichau\source\repos\CG_CURSO -B"C:\Users\Pichau\source\repos\CG_CURSO\out\build\x64-Debug (padrão)""
+  COMMAND = cmd.exe /C "cd /D "C:\Users\Pichau\Documents\Programação\C++\CG_OpenGL_GLFW_GLEW_GLM_STB\out\build\x64-Debug (padrão)" && "D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\Pichau\Documents\Programação\C++\CG_OpenGL_GLFW_GLEW_GLM_STB -B"C:\Users\Pichau\Documents\Programação\C++\CG_OpenGL_GLFW_GLEW_GLM_STB\out\build\x64-Debug (padrão)""
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -184,7 +184,7 @@ build Vectors: phony Vectors.exe
 # =============================================================================
 
 #############################################
-# Folder: C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)
+# Folder: C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/out/build/x64-Debug (padrão)
 
 build all: phony BlueMarble.exe Vectors.exe Matrices.exe
 

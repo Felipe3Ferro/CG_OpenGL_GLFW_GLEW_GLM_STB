@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cassert>
 #include<array>
+#include <fstream>
 
 #include <GL/glew.h>
 
@@ -12,6 +13,112 @@
 
 const int Width = 800; 
 const int Height = 600;
+
+std::string ReadFile(const char* FilePath) {
+	std::string FileContents;
+	if (std::ifstream FileStream{ FilePath, std::ios::in }) {
+
+		// Vai ler dentro do FIleContents o conteudo do arquivo apontado por FilePath
+		FileContents.assign(std::istreambuf_iterator<char>(FileStream), std::istreambuf_iterator<char>());
+	}
+	return FileContents;
+}
+
+
+void CheckShader(GLuint ShaderId) {
+	//ShaderId tem que ser um identificador de um shader já compilado
+
+	GLint Result = GL_TRUE;
+	glGetShaderiv(ShaderId, GL_COMPILE_STATUS, &Result);
+
+	if (Result == GL_FALSE) {
+
+		//Houve um erro ao compilar o shader, vamos imprimir o log para saber qual foi o erro
+		
+		//Obter o tamanho do log
+		GLint InfoLogLength = 0;
+		glGetShaderiv(ShaderId, GL_INFO_LOG_LENGTH, &InfoLogLength);
+
+		if (InfoLogLength > 0) {
+
+			std::string ShaderInfoLog(InfoLogLength, '\0');
+			glGetShaderInfoLog(ShaderId, InfoLogLength, nullptr, &ShaderInfoLog[0]);
+
+			std::cout << "Erro no shader" << std::endl;
+			std::cout << ShaderInfoLog << std::endl;
+
+			assert(false);
+
+		}
+	}
+}
+
+GLuint LoadShaders(const char* VertexShaderFile, const char* FragmentShaderFile) {
+	std::string VertexShaderSource = ReadFile(VertexShaderFile);
+	std::string FragmentShaderSource = ReadFile(FragmentShaderFile);
+
+	assert(!VertexShaderSource.empty());
+	assert(!FragmentShaderSource.empty());
+
+	//Cria os identificadores do Vertex e Shader
+	GLuint VertexShaderId = glCreateShader(GL_VERTEX_SHADER);
+	GLuint FragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
+
+	std::cout << "Compilando " << VertexShaderFile << std::endl;
+	const char* VertexShaderSourcePtr = VertexShaderSource.c_str();
+	glShaderSource(VertexShaderId, 1, &VertexShaderSourcePtr, nullptr);
+	glCompileShader(VertexShaderId);
+	CheckShader(VertexShaderId);
+
+	// Verificar se a compilação do VertexShader deu certo
+
+	std::cout << "Compilando "<< FragmentShaderFile << std::endl;
+	const char* FragmentShaderSourcePtr = FragmentShaderSource.c_str();
+	glShaderSource(FragmentShaderId, 1, &FragmentShaderSourcePtr, nullptr);
+	glCompileShader(FragmentShaderId);
+	CheckShader(FragmentShaderId);
+
+	// Verificar se a compilação do FragmentShader deu certo
+
+	std::cout << "Linkando o programa" << std::endl;
+	GLuint ProgramId = glCreateProgram();
+	glAttachShader(ProgramId, VertexShaderId);
+	glAttachShader(ProgramId, FragmentShaderId);
+	glLinkProgram(ProgramId);
+
+	//Verifica se o programa foi linkado corretamente
+
+	GLint Result = GL_TRUE;
+
+	glGetProgramiv(ProgramId, GL_LINK_STATUS, &Result);
+
+	if (Result == GL_FALSE) {
+		
+		//Houve um erro ao compilar o shader, vamos imprimir o log para saber qual o erro
+
+		//Obtem o tamanho do log
+		GLint InfoLogLength = 0;
+		glGetProgramiv(ProgramId, GL_INFO_LOG_LENGTH, &InfoLogLength);
+
+		if (InfoLogLength > 0) {
+			std::string ProgramInfoLog(InfoLogLength, '\0');
+			glGetProgramInfoLog(ProgramId, InfoLogLength, nullptr, &ProgramInfoLog[0]);
+			
+			std::cout << "Erro ao linkar o programa" << std::endl;
+			std::cout << ProgramInfoLog << std::endl;
+			assert(false);
+		}
+	}
+
+	glDetachShader(ProgramId, VertexShaderId);
+	glDetachShader(ProgramId, FragmentShaderId);
+
+	glDeleteShader(VertexShaderId);
+	glDeleteShader(FragmentShaderId);
+
+	return ProgramId;
+
+}
 
 int main() {
 
@@ -42,12 +149,15 @@ int main() {
 	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 	std::cout << "GLSL Version: : " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 
+	GLuint ProgramId = LoadShaders("shaders/triangle_vert.glsl", "shaders/triangle_frag.glsl");
+
 	//Definindo um triangulo em coordenadas normalizadas
 	std::array<glm::vec3, 3> Triangle = {
 		glm::vec3{-1.0f,-1.0f,0.0f},
 		glm::vec3{1.0f,-1.0f,0.0f},
 		glm::vec3{0.0f,1.0f,0.0f}
 	};
+
 	//________________________________________________________________________Inicio da Camera________________________________________________________________________
 	//Model Matrix
 	glm::mat4 ModelMatrix = glm::identity<glm::mat4>();
@@ -100,6 +210,10 @@ int main() {
 		//Quando formos desenhar geometris 3D, vamos voltar ao glClear porque teremos que limpar o buffer de profundidade(depth buffer)
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		//Ativar o programa de shader
+		glUseProgram(ProgramId);
+
+
 		glEnableVertexAttribArray(0);
 
 		//Diz para o OpenGL que o VertexBuffer vai ser o buffer ativo no momento
@@ -115,6 +229,10 @@ int main() {
 		//Reverter o estado que nós criamos
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glDisableVertexAttribArray(0);
+
+		//Desabilitar o programa ativo
+		glUseProgram(0);
+
 
 		//Processa todos os eventos da fila de evnetos do GLFW
 		//Eventos podem ser do teclado, mouse, gamepad

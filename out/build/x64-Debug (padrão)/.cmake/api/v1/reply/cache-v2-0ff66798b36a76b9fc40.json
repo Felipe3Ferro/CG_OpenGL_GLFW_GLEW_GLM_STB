@@ -11,7 +11,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)"
+			"value" : "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/out/build/x64-Debug (padrão)"
 		},
 		{
 			"name" : "BlueMarble_SOURCE_DIR",
@@ -23,7 +23,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/Pichau/source/repos/CG_CURSO"
+			"value" : "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB"
 		},
 		{
 			"name" : "CMAKE_BUILD_TYPE",
@@ -47,7 +47,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "c:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)"
+			"value" : "c:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/out/build/x64-Debug (padrão)"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -523,7 +523,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Users/Pichau/source/repos/CG_CURSO"
+			"value" : "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -535,7 +535,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/Pichau/source/repos/CG_CURSO/out/install/x64-Debug (padrão)"
+			"value" : "C:/Users/Pichau/Documents/Programação/C++/CG_OpenGL_GLFW_GLEW_GLM_STB/out/install/x64-Debug (padrão)"
 		},
 		{
 			"name" : "CMAKE_LINKER",
@@ -1048,30 +1048,6 @@
 			],
 			"type" : "BOOL",
 			"value" : "FALSE"
-		},
-		{
-			"name" : "Project_BINARY_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "C:/Users/Pichau/source/repos/CG_CURSO/out/build/x64-Debug (padrão)"
-		},
-		{
-			"name" : "Project_SOURCE_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "C:/Users/Pichau/source/repos/CG_CURSO"
 		}
 	],
 	"kind" : "cache",

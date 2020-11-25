@@ -83,7 +83,7 @@ rule CXX_EXECUTABLE_LINKER__Matrices_Debug
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = "D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\Pichau\source\repos\CG_CURSO -B"C:\Users\Pichau\source\repos\CG_CURSO\out\build\x64-Debug (padrão)"
+  command = "D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\Pichau\Documents\Programação\C++\CG_OpenGL_GLFW_GLEW_GLM_STB -B"C:\Users\Pichau\Documents\Programação\C++\CG_OpenGL_GLFW_GLEW_GLM_STB\out\build\x64-Debug (padrão)"
   description = Re-running CMake...
   generator = 1
 
