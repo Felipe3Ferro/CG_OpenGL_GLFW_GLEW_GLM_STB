@@ -9,12 +9,19 @@
 
 #include<glm/glm.hpp>
 #include <glm/ext.hpp> 
+#include <glm/gtx/string_cast.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include<stb_image.h>
 
-const int Width = 800;
-const int Height = 600;
+int Width = 800;
+int Height = 600;
+
+struct Vertex {
+	glm::vec3 Position;
+	glm::vec3 Color;
+	glm::vec2 UV;
+};
 
 std::string ReadFile(const char* FilePath) {
 	std::string FileContents;
@@ -25,7 +32,6 @@ std::string ReadFile(const char* FilePath) {
 	}
 	return FileContents;
 }
-
 
 void CheckShader(GLuint ShaderId) {
 	//ShaderId tem que ser um identificador de um shader já compilado
@@ -122,6 +128,84 @@ GLuint LoadShaders(const char* VertexShaderFile, const char* FragmentShaderFile)
 
 }
 
+GLuint LoadGeometry() {
+
+	//Definindo um triangulo em coordenadas normalizadas
+	std::array<Vertex, 6> Quad = {
+		Vertex{ glm::vec3{-1.0f,-1.0f,0.0f},
+				glm::vec3{1.0f,0.0f,0.0f},
+				glm::vec2{0.0f,0.0f} },
+
+		Vertex{ glm::vec3{1.0f,-1.0f,0.0f},
+				glm::vec3{0.0f,1.0f,0.0f},
+				glm::vec2{1.0f,0.0f} },
+
+		Vertex{ glm::vec3{1.0f,1.0f,0.0f},
+				glm::vec3{1.0f,0.0f,0.0f},
+				glm::vec2{1.0f,1.0f} },
+
+		Vertex{ glm::vec3{-1.0f,1.0f,0.0f},
+				glm::vec3{0.0f,0.0f,1.0f},
+				glm::vec2{0.0f,1.0f} }
+
+	};
+
+	std::array<glm::ivec3, 2> Indices = {
+		glm::ivec3{0,1,3},
+		glm::ivec3{3,1,2}
+	};
+
+
+	//Agora, vamos copiar os vértices do triangulo para a memória da GPU
+	GLuint VertexBuffer;
+
+	//Pedir para o OpenGL gerar o identificador do VBO
+	glGenBuffers(1, &VertexBuffer);
+
+	//Pedir para o OpenGL gerar o identificador do EBO
+	GLuint ElementBuffer = 0;
+	glGenBuffers(1, &ElementBuffer);
+
+	//Ativar o VertexBuffer como sendo o buffer para onde vamos copiar os dados do triangulo
+	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
+
+	//Copiar os dados para a memória de vídeo
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Quad), Quad.data(), GL_STATIC_DRAW);
+
+	//copiar os dados do Element Buffer para GPU
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ElementBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices.data(), GL_STATIC_DRAW);
+
+	//Gerar o Vertex Array Object (VAO)
+	GLuint VAO;
+	glGenVertexArrays(1, &VAO);
+
+	//Habilitar o VAO
+	glBindVertexArray(VAO);
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+
+	//Diz para o OpenGL que o VertexBuffer vai ser o buffer ativo no momento
+	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ElementBuffer);
+
+
+	//Informa ao OpenGL onde, dentro do vertexBuffer, onde os vertices estão
+	//NO caso o array Triangles é contiguoo em memória, logo basta dizer quantos vertices vamos usar para desenhar o triangulo
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, sizeof(Vertex),
+		reinterpret_cast<void*>(offsetof(Vertex, Color)));
+
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_TRUE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, UV)));
+
+	//Desabilita o VAO
+	glBindVertexArray(0);
+
+	return VAO;
+}
+
 GLuint LoadTexture(const char* TextureFile) {
 	std::cout << "Carregando Textura" << TextureFile << std::endl;
 
@@ -164,11 +248,99 @@ GLuint LoadTexture(const char* TextureFile) {
 	return TextureId;
 }
 
-struct Vertex {
-	glm::vec3 Position;
-	glm::vec3 Color;
-	glm::vec2 UV;
+class FlyCamera {
+public:
+	
+
+	void MoveFoward(float Amount) {
+		Location += glm::normalize(Direction) * Amount * Speed;
+		//std::cout << glm::to_string(Location);
+	}
+
+	void MoveRight(float Amount) {
+		glm::vec3 Rigth = glm::normalize(glm::cross(Direction, Up));
+
+		Location += Rigth * Amount * Speed;
+	}
+
+	void Look(float Yaw, float Pitch) {
+		Yaw *= Sensitivity;
+		Pitch *= Sensitivity;
+
+		const glm::vec3 Right = glm::normalize(glm::cross(Direction, Up));
+
+		const glm::mat4 I = glm::identity<glm::mat4>();
+		glm::mat4 YawRotation = glm::rotate(I,glm::radians(Yaw),-Up);
+		glm::mat4 PitchRotation = glm::rotate(I, glm::radians(Pitch), -Right);
+
+
+		Up = PitchRotation * glm::vec4{ Up,0.0f };
+		Direction = YawRotation * PitchRotation *glm::vec4{ Direction,0.0f };
+
+	}
+
+	glm::mat4 GetViewProjection() const {
+		glm::mat4 View = glm::lookAt(Location, Location + Direction, Up);
+		glm::mat4 Projection = glm::perspective(FieldOfView, AspectRatio, Near, Far);
+		return Projection * View;
+	}
+	//Parametros de Interatividade
+	float Speed = 5.0f;
+	float Sensitivity = 0.1f;
+
+	//Definição da Matriz de View
+	glm::vec3 Location{ 0.0f,0.0f,10.0f };
+	glm::vec3 Direction{ 0.0f,0.0f,-1.0f };
+	glm::vec3 Up{ 0.0f,1.0f,0.0f };
+
+	//Definição da Matriz Projection
+	float FieldOfView = glm::radians(45.0f);
+	float AspectRatio = Width / Height;
+	float Near = 0.01f;
+	float Far = 1000.0f;
 };
+
+FlyCamera Camera;
+bool bEnableMouseMovement = false;
+glm::vec2 PreviousCursor{ 0.0,0.0 };
+
+void MouseButtonCallback(GLFWwindow* Window, int Button, int Action, int Modifiers) {
+	if (Button == GLFW_MOUSE_BUTTON_LEFT) {
+		if (Action == GLFW_PRESS) {
+			glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			bEnableMouseMovement = true;
+
+			double X, Y;
+			glfwGetCursorPos(Window, &X, &Y);
+
+			PreviousCursor = glm::vec2{ X,Y };
+		}
+		if (Action == GLFW_RELEASE) {
+			glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			bEnableMouseMovement = false;
+		}
+	}
+}
+
+void MouseMotionCallback(GLFWwindow* Window, double X, double Y) {
+	if (bEnableMouseMovement) {
+		glm::vec2 CurrentCursor{ X,Y };
+		glm::vec2 DeltaCursor = CurrentCursor - PreviousCursor;
+
+		//std::cout << glm::to_string(DeltaCursor) << std::endl;
+		Camera.Look(DeltaCursor.x,DeltaCursor.y);
+		PreviousCursor = CurrentCursor;
+
+	}
+}
+
+void Resize(GLFWwindow* Window, int NewWidth, int NewHeight) {
+	Width = NewWidth;
+	Height = NewHeight;
+
+	Camera.AspectRatio = static_cast<float>(Width) / Height;
+	glViewport(0, 0, Width, Height);
+}
 
 int main() {
 
@@ -179,13 +351,21 @@ int main() {
 	GLFWwindow* Window = glfwCreateWindow(Width, Height, "Blue Marble", nullptr, nullptr);
 	assert(Window);
 
+	//Cadastrar as callbacks no GLFW
+	glfwSetMouseButtonCallback(Window, MouseButtonCallback);
+	glfwSetCursorPosCallback(Window, MouseMotionCallback);
+	glfwSetFramebufferSizeCallback(Window, Resize);
+
 	//Ativa o contexto criado na janela do Windows
 	glfwMakeContextCurrent(Window);
+
+	//Habilita ou Desabilita o V-sync
+	glfwSwapInterval(0);
 
 	//Inicializa a biblioteca GLEW
 	assert(glewInit() == GLEW_OK);
 
-	//Veifica a versão do OpenGL que esta sendo usada
+	/*//Veifica a versão do OpenGL que esta sendo usada
 	GLint GLMajorVersion = 0;
 	GLint GLMinorVersion = 0;
 	glGetIntegerv(GL_MAJOR_VERSION, &GLMajorVersion);
@@ -197,73 +377,49 @@ int main() {
 	std::cout << "OpenGL Vendor: " << glGetString(GL_VENDOR) << std::endl;
 	std::cout << "OpenGL Renderer: " << glGetString(GL_RENDERER) << std::endl;
 	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
-	std::cout << "GLSL Version: : " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+	std::cout << "GLSL Version: : " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;*/
+
+	Resize(Window, Width, Height);
 
 	GLuint ProgramId = LoadShaders("shaders/triangle_vert.glsl", "shaders/triangle_frag.glsl");
 
 	GLuint TextureId = LoadTexture("textures/earth_2k.jpg");
 
-	//Definindo um triangulo em coordenadas normalizadas
-	std::array<Vertex, 3> Triangle = {
-		Vertex{glm::vec3{-1.0f,-1.0f,0.0f},glm::vec3{1.0f,0.0f,0.0f}, glm::vec2{0.0f,0.0f}},
-		Vertex{glm::vec3{1.0f,-1.0f,0.0f},glm::vec3{0.0f,1.0f,0.0f},glm::vec2{1.0f,0.0f} },
-		Vertex{glm::vec3{0.0f,1.0f,0.0f},glm::vec3{0.0f,0.0f,1.0f},glm::vec2{0.5f,1.0f} } 
-	};
+	GLuint QuadVao = LoadGeometry();
 
-	//________________________________________________________________________Inicio da Camera________________________________________________________________________
 	//Model Matrix
 	glm::mat4 ModelMatrix = glm::identity<glm::mat4>();
-
-	//View Matrix
-	glm::vec3 Eye{ 0,0,5 };
-	glm::vec3 Center{ 0,0,0 };
-	glm::vec3 Up{ 0,1,0 };
-	glm::mat4 ViewMatrix = glm::lookAt(Eye, Center, Up);
-
-	//Projection Matrix
-	constexpr float FoV = glm::radians(45.0f);
-	const float AspectRation = Width / Height;
-	const float Near = 0.001f;
-	const float Far = 1000.0f;
-	glm::mat4 ProjectionMatrix = glm::perspective(FoV, AspectRation, Near, Far);
-
-	//ModelViewProjection
-	glm::mat4 ModelViewProjection = ProjectionMatrix * ViewMatrix * ModelMatrix;
-
-
-	//Aplicar a ModelViewProjection nos vértices do trianglo
-	/*for (Vertex& Vertex : Triangle) USA O CALCULO NO PROCESSADOR
-	{
-		glm::vec4 ProjectedVertex = ModelViewProjection * glm::vec4{ Vertex.Position, 1.0f };
-		ProjectedVertex /= ProjectedVertex.w;
-		Vertex.Position = ProjectedVertex;
-	}*/
-	//________________________________________________________________________Fim da Camera________________________________________________________________________
-
-	//Agora, vamos copiar os vértices do triangulo para a memória da GPU
-	GLuint VertexBuffer;
-
-	//Pedir para o OpenGL gerar o identificador do VertexBuffer
-	glGenBuffers(1, &VertexBuffer);
-
-	//Ativar o VertexBuffer como sendo o buffer para onde vamos copiar os dados do triangulo
-	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
-
-	//Copiar os dados para a memória de vídeo
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Triangle), Triangle.data(), GL_STATIC_DRAW);
-
 
 	//Definir a cor de fundo
 	glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
 
+	//Guarda o tempo do frame anterior
+	double PreviousTime = glfwGetTime();
+
+	//Habilitar o BackFace culling
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
 	//Entra no loop de eventos da aplicação
 	while (!glfwWindowShouldClose(Window)) {
+
+		double CurrentTime = glfwGetTime();
+		double DeltaTime = CurrentTime - PreviousTime;
+
+		if (DeltaTime > 0) {
+			PreviousTime = CurrentTime;
+		}
+
 		// glClear vai limpar o framebuffer. GLCOLOR_BUFFER_BIT diz para limpar o buffer de cor. Depois de limpar, ele vai preencher com a cor que foi configurada no glClearColor.
 		//Quando formos desenhar geometris 3D, vamos voltar ao glClear porque teremos que limpar o buffer de profundidade(depth buffer)
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//Ativar o programa de shader
 		glUseProgram(ProgramId);
+
+		glm::mat4 ViewProjectionMatrix = Camera.GetViewProjection();
+
+		glm::mat4 ModelViewProjection = ViewProjectionMatrix * ModelMatrix;
 
 
 		GLint ModelViewProjectionLoc = glGetUniformLocation(ProgramId, "ModelViewProjection");
@@ -275,30 +431,14 @@ int main() {
 		GLint TextureSamplerLoc = glGetUniformLocation(ProgramId, "TextureSampler");
 		glUniform1i(TextureSamplerLoc, 0);
 
-
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glEnableVertexAttribArray(2);
-
-		//Diz para o OpenGL que o VertexBuffer vai ser o buffer ativo no momento
-		glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
-
-		//Informa ao OpenGL onde, dentro do vertexBuffer, onde os vertices estão
-		//NO caso o array Triangles é contiguoo em memória, logo basta dizer quantos vertices vamos usar para desenhar o triangulo
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, sizeof(Vertex),
-							reinterpret_cast<void*>(offsetof(Vertex, Color)));
-
-		glVertexAttribPointer(2,2,GL_FLOAT,GL_TRUE,sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, UV)));
+		glBindVertexArray(QuadVao);
 
 		//Finalmente diz para o OpenGL desenhar o triangulo com os dados que estão armazenados no VertexBuffer
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		// glDrawArrays(GL_TRIANGLES, 0, Quad.size());
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
-		//Reverter o estado que nós criamos
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);
+		glBindVertexArray(0);
 
 		//Desabilitar o programa ativo
 		glUseProgram(0);
@@ -310,10 +450,27 @@ int main() {
 
 		//Envia o conteudo do framebuffer da janaela para ser desenhada na tela
 		glfwSwapBuffers(Window);
+
+		//Processa os Inputs do teclado
+		if (glfwGetKey(Window, GLFW_KEY_W) == GLFW_PRESS) {
+			Camera.MoveFoward(1.0f * DeltaTime);
+		}
+		if (glfwGetKey(Window, GLFW_KEY_S) == GLFW_PRESS) {
+			Camera.MoveFoward(-1.0f * DeltaTime);
+		}
+		if (glfwGetKey(Window, GLFW_KEY_A) == GLFW_PRESS) {
+			Camera.MoveRight(-1.0f * DeltaTime);
+		}
+		if (glfwGetKey(Window, GLFW_KEY_D) == GLFW_PRESS) {
+			Camera.MoveRight(1.0f * DeltaTime);
+		}
+		if (glfwGetKey(Window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+			glfwTerminate();
+		}
 	}
 
 	//Desalocar o VertexBuffer
-	glDeleteBuffers(1, &VertexBuffer);
+	glDeleteVertexArrays(1, &QuadVao);
 
 	//Encerra a biblioteca GLFW
 	glfwTerminate();
