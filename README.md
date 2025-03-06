@@ -65,8 +65,3 @@ Make sure you have the following installed:
    ```bash
    ./OpenGL_Terrain
    ```
-
-## 🎉 Acknowledgments  
-- OpenGL documentation and tutorials.  
-- LearnOpenGL resources.  
-- GLFW, GLEW, and GLM libraries.  
