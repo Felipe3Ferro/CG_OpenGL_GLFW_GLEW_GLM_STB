@@ -21,7 +21,22 @@ This project is a **3D rendering study** using **OpenGL** with a terrain rendere
 | D   | Move right |
 | Mouse | Look around (camera movement) |
 
-## 📥 Installation & Setup  
+## 👅 Features  
+
+- Real-time **terrain rendering** with OpenGL.
+- **Camera movement** using keyboard and mouse.
+- **Shader-based rendering** with GLSL.
+- **Texture loading** using STB library.
+- **Efficient mathematical operations** with GLM.
+
+## 👅 Future Improvements  
+
+- Implement **lighting effects** (Phong, Blinn-Phong, etc.).
+- Add **textures and materials** for better realism.
+- Optimize rendering using **vertex buffer objects (VBOs)**.
+- Introduce **shadow mapping** for depth perception.
+
+## 👅 Installation & Setup  
 
 ### 🔹 **Prerequisites**  
 
@@ -34,5 +49,24 @@ Make sure you have the following installed:
 
 1. Clone this repository:  
    ```bash
-   git clone https://github.com/yourusername/CG_OpenGL_Terrain.git
-   cd CG_OpenGL_Terrain
+   git clone https://github.com/Felipe3Ferro/CG_OpenGL_GLFW_GLEW_GLM_STB.git
+   cd CG_OpenGL_GLFW_GLEW_GLM_STB
+   ```
+
+2. Create a **build** directory and run CMake:  
+   ```bash
+   mkdir build
+   cd build
+   cmake ..
+   make
+   ```
+
+3. Run the executable:  
+   ```bash
+   ./OpenGL_Terrain
+   ```
+
+## 🎉 Acknowledgments  
+- OpenGL documentation and tutorials.  
+- LearnOpenGL resources.  
+- GLFW, GLEW, and GLM libraries.  
